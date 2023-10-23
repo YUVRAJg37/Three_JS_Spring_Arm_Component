@@ -16,16 +16,15 @@ scene.add(player);
 
 const springArmComponent = new SpringArmComponent(player, camera);
 const properties = {
-  springArmLength: 3,
+  springArmLength: 4,
 };
-
 gui
   .add(properties, "springArmLength", 1, 10, 0.01)
   .name("Spring Arm Length")
   .onChange((val) => {
     springArmComponent.SetSpringArmLength(val);
   });
-
+springArmComponent.SetSpringArmLength(properties.springArmLength);
 const tick = () => {
   renderScene();
   controls.update();

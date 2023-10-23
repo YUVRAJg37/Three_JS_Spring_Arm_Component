@@ -20,9 +20,24 @@ const box = new THREE.Mesh(
 );
 box.position.z = -2;
 
-scene.add(floor, box);
+const plane = new THREE.Mesh(
+  new THREE.PlaneGeometry(3, 3, 8, 8),
+  new THREE.MeshBasicMaterial({
+    color: "red",
+    side: THREE.DoubleSide,
+  })
+);
+plane.position.x = -2;
+plane.position.z = 2;
+plane.rotation.z = Math.PI / 2;
+
+//floor.updateMatrixWorld();
+plane.updateMatrixWorld();
+
+scene.add(floor, box, plane);
 
 collisionGeometry.push(floor);
 collisionGeometry.push(box);
+collisionGeometry.push(plane);
 
 export default collisionGeometry;

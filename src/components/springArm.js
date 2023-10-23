@@ -1,8 +1,4 @@
 import * as THREE from "three";
-import camera from "./core/camera";
-import controls from "./core/cameraOrbit";
-import gui from "./debug/debug";
-
 class SpringArmComponent {
   #rayCaster;
   #targetPosition;
@@ -13,12 +9,10 @@ class SpringArmComponent {
       this.Target.position.y,
       this.Target.position.z
     );
-    this.SpringArmLength = 3;
-    this.SocketOffset = new THREE.Vector3(0, 0, 0);
-    this.WorldOffset = new THREE.Vector3(0, 0, 0);
+    this.SpringArmLength = 4;
     this.Cam = cam;
     this.doCollisionTest = true;
-    this.SpringArmDistance = this.#targetPosition.distanceTo(cam.position);
+    this.SpringArmDistance = this.#targetPosition.distanceTo(this.Cam.position);
     this.#rayCaster = new THREE.Raycaster();
   }
 
@@ -82,13 +76,12 @@ class SpringArmComponent {
   Update() {
     if (this.Target == null) return;
     if (this.doCollisionTest) this.CheckCollision();
-
-    this.Cam.position.lerp();
   }
 
   SetSpringArmLength(newLen) {
     this.SpringArmLength = newLen;
     this.Cam.position.copy(this.GetNewCamPosition());
+    this.SpringArmDistance = this.#targetPosition.distanceTo(this.Cam.position);
   }
 }
 
