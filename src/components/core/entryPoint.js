@@ -5,7 +5,7 @@ import SpringArmComponent from "../springArm";
 import camera from "./camera";
 import scene from "./scene";
 import gui from "../debug/debug";
-import "./../worldGen";
+import obj from "./../worldGen";
 
 const player = new THREE.Mesh(
   new THREE.CapsuleGeometry(0.2, 0.4, 8, 32),
@@ -15,7 +15,6 @@ player.position.y = -0.1;
 scene.add(player);
 
 const springArmComponent = new SpringArmComponent(player, camera);
-
 const properties = {
   springArmLength: 3,
 };
@@ -30,6 +29,8 @@ gui
 const tick = () => {
   renderScene();
   controls.update();
+  springArmComponent.HandleSpringCollision(obj);
+  //springArmComponent.PerformLerp();
   window.requestAnimationFrame(tick);
 };
 
