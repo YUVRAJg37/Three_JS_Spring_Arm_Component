@@ -29,8 +29,7 @@ gui
 const tick = () => {
   renderScene();
   controls.update();
-  springArmComponent.HandleSpringCollision(obj);
-  //springArmComponent.PerformLerp();
+  springArmComponent.CheckCollision(obj);
   window.requestAnimationFrame(tick);
 };
 
