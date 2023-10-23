@@ -13,7 +13,6 @@ const player = new THREE.Mesh(
 );
 player.position.y = -0.1;
 scene.add(player);
-
 const springArmComponent = new SpringArmComponent(player, camera);
 const properties = {
   springArmLength: 4,

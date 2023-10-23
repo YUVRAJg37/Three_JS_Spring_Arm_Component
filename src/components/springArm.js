@@ -16,8 +16,7 @@ class SpringArmComponent {
     this.#rayCaster = new THREE.Raycaster();
   }
 
-  GetNewCamPosition() {
-    const currentPosition = this.Cam.position;
+  GetNewCamPosition(currentPosition, len) {
     const directionVector = new THREE.Vector3(
       currentPosition.x - this.Target.position.x,
       currentPosition.y - this.Target.position.y,
@@ -27,9 +26,9 @@ class SpringArmComponent {
     normalizedDirection.normalize();
 
     const newPos = new THREE.Vector3(
-      this.Target.position.x + normalizedDirection.x * this.SpringArmLength,
-      this.Target.position.y + normalizedDirection.y * this.SpringArmLength,
-      this.Target.position.z + normalizedDirection.z * this.SpringArmLength
+      this.Target.position.x + normalizedDirection.x * len,
+      this.Target.position.y + normalizedDirection.y * len,
+      this.Target.position.z + normalizedDirection.z * len
     );
     return newPos;
   }
@@ -39,8 +38,16 @@ class SpringArmComponent {
   }
 
   SetToOriginalPoint() {
-    if (!this.Comparator(this.Cam.position, this.GetNewCamPosition(), 0.01)) {
-      this.CamLerpToPoint(this.GetNewCamPosition());
+    if (
+      !this.Comparator(
+        this.Cam.position,
+        this.GetNewCamPosition(this.Cam.position, this.SpringArmLength),
+        0.01
+      )
+    ) {
+      this.CamLerpToPoint(
+        this.GetNewCamPosition(this.Cam.position, this.SpringArmLength)
+      );
     }
   }
 
@@ -67,7 +74,13 @@ class SpringArmComponent {
       intersects.length > 0 &&
       intersects[0].distance <= this.SpringArmDistance
     ) {
-      this.CamLerpToPoint(intersects[0].point);
+      const point = new THREE.Vector3(
+        intersects[0].point.x,
+        intersects[0].point.y,
+        intersects[0].point.z
+      );
+
+      this.CamLerpToPoint(point);
     } else {
       this.SetToOriginalPoint();
     }
@@ -80,7 +93,9 @@ class SpringArmComponent {
 
   SetSpringArmLength(newLen) {
     this.SpringArmLength = newLen;
-    this.Cam.position.copy(this.GetNewCamPosition());
+    this.Cam.position.copy(
+      this.GetNewCamPosition(this.Cam.position, this.SpringArmLength)
+    );
     this.SpringArmDistance = this.#targetPosition.distanceTo(this.Cam.position);
   }
 }

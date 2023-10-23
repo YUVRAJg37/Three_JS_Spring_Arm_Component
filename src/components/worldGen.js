@@ -31,9 +31,6 @@ plane.position.x = -2;
 plane.position.z = 2;
 plane.rotation.z = Math.PI / 2;
 
-//floor.updateMatrixWorld();
-plane.updateMatrixWorld();
-
 scene.add(floor, box, plane);
 
 collisionGeometry.push(floor);
