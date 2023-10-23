@@ -5,7 +5,7 @@ import SpringArmComponent from "../springArm";
 import camera from "./camera";
 import scene from "./scene";
 import gui from "../debug/debug";
-import obj from "./../worldGen";
+import geo from "./../worldGen";
 
 const player = new THREE.Mesh(
   new THREE.CapsuleGeometry(0.2, 0.4, 8, 32),
@@ -27,7 +27,7 @@ springArmComponent.SetSpringArmLength(properties.springArmLength);
 const tick = () => {
   renderScene();
   controls.update();
-  springArmComponent.CheckCollision(obj);
+  springArmComponent.CheckCollision(geo);
   window.requestAnimationFrame(tick);
 };
 
