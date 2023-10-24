@@ -2,9 +2,14 @@ import * as THREE from "three";
 import scene from "./core/scene";
 import { Plane } from "cannon-es";
 
+//Array to store collision geometry
 const collisionGeometry = [];
 
-//-------------Floor---------------------
+/*----------------------------------------
+------------------------------------------
+----------------Floor---------------------
+------------------------------------------
+----------------------------------------*/
 const floor = new THREE.Mesh(
   new THREE.BoxGeometry(30, 0.01, 30),
   new THREE.MeshBasicMaterial({
@@ -14,15 +19,18 @@ const floor = new THREE.Mesh(
 );
 floor.position.y -= 0.5;
 
+//Create a bounding box for the floor
 const boundingFloor = new THREE.Box3();
 boundingFloor.setFromObject(floor);
 
 scene.add(floor);
 collisionGeometry.push(floor);
 
-//--------------------------------------------
-
-//-----------------Box--------------------------
+/*----------------------------------------
+------------------------------------------
+-----------------Box----------------------
+------------------------------------------
+----------------------------------------*/
 const boxGroup = new THREE.Group();
 for (let i = 0; i < 8; i++) {
   const angle = (i / 8) * Math.PI * 2;
@@ -42,8 +50,11 @@ for (let i = 0; i < 8; i++) {
 
 scene.add(boxGroup);
 
-//----------------------------------------------
-//-----------------Plane------------------------
+/*----------------------------------------
+------------------------------------------
+----------------Plane---------------------
+------------------------------------------
+----------------------------------------*/
 
 const plane1Group = new THREE.Group();
 const plane2Group = new THREE.Group();
@@ -100,7 +111,11 @@ for (let i = 0; i < 8; i++) {
 scene.add(plane1Group);
 scene.add(plane2Group);
 
-//----------------------------------------------
+/*----------------------------------------
+------------------------------------------
+------------------------------------------
+------------------------------------------
+----------------------------------------*/
 
 const Geometry = {
   collisionGeometry: collisionGeometry,

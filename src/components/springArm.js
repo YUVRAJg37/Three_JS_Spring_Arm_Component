@@ -1,8 +1,10 @@
 import * as THREE from "three";
 class SpringArmComponent {
+  //Private Fields
   #rayCaster;
   #targetPosition;
   #boundingCameraSphere;
+
   constructor(obj, cam) {
     this.Target = obj;
     this.#targetPosition = new THREE.Vector3(
@@ -14,10 +16,13 @@ class SpringArmComponent {
     this.Cam = cam;
     this.doCollisionTest = true;
     this.SpringArmDistance = this.#targetPosition.distanceTo(this.Cam.position);
+
+    //Initializing Private Fields
     this.#rayCaster = new THREE.Raycaster();
     this.#boundingCameraSphere = new THREE.Sphere(this.Cam.position, 0.5);
   }
 
+  //Calulate new camera position based on length
   #GetNewCamPosition(currentPosition, len) {
     const directionVector = new THREE.Vector3(
       currentPosition.x - this.Target.position.x,
@@ -35,10 +40,12 @@ class SpringArmComponent {
     return newPos;
   }
 
+  //Linearly Interpolating the camera position
   #CamLerpToPoint(point, lerp) {
     this.Cam.position.lerp(point, lerp);
   }
 
+  //Set the camera back to its original position
   #SetToOriginalPoint(ler) {
     if (
       !this.#Comparator(
@@ -54,6 +61,7 @@ class SpringArmComponent {
     }
   }
 
+  //Handle Collision with camer bounding box
   #HandleCameraBoundingBoxCollision(target) {
     const camPosition = new THREE.Vector3(
       this.Cam.position.x,
@@ -85,6 +93,7 @@ class SpringArmComponent {
     }
   }
 
+  //Handle collision with raycasting
   #HandleRayCastCollision(target) {
     const directionVector = new THREE.Vector3(
       this.Cam.position.x - this.Target.position.x,
@@ -111,6 +120,7 @@ class SpringArmComponent {
     }
   }
 
+  //Handle Collision based on context
   #HandleCollision(geo) {
     const collisionGeometry = geo.collisionGeometry;
     if (this.#boundingCameraSphere.intersectsBox(geo.boundingFloor)) {
@@ -120,11 +130,13 @@ class SpringArmComponent {
     }
   }
 
+  //Update the camera and handle collision
   Update(geo) {
     if (this.Target == null) return;
     if (this.doCollisionTest) this.#HandleCollision(geo);
   }
 
+  //Compare two vectors with a tolerance
   #Comparator(first, second, tolerance) {
     if (
       Math.abs(first.x - second.x) < tolerance &&
@@ -135,6 +147,7 @@ class SpringArmComponent {
     return false;
   }
 
+  //Set the spring arm length
   SetSpringArmLength(newLen) {
     this.SpringArmLength = newLen;
     this.Cam.position.copy(
