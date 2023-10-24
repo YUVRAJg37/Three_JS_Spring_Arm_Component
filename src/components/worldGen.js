@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import scene from "./core/scene";
-import { Plane } from "cannon-es";
 
 //Array to store collision geometry
 const collisionGeometry = [];

@@ -88,6 +88,7 @@ class SpringArmComponent {
       const dis = this.Cam.position.distanceTo(intersects[0].point);
       if (dis > 4) {
         this.#CamLerpToPoint(this.#GetNewCamPosition(point, distance), 0.5);
+        //this.Cam.position.copy(this.#GetNewCamPosition(point, distance));
       } else
         this.#CamLerpToPoint(this.#GetNewCamPosition(point, distance), 0.1);
     }
