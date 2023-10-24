@@ -113,10 +113,10 @@ class SpringArmComponent {
         intersects[0].point.z
       );
       let distance = point.distanceTo(this.#targetPosition);
-      distance -= 0.2;
+      //distance -= 0.2;
       this.#CamLerpToPoint(this.#GetNewCamPosition(point, distance), 0.9);
     } else {
-      this.#SetToOriginalPoint(0.1);
+      this.#SetToOriginalPoint(0.05);
     }
   }
 

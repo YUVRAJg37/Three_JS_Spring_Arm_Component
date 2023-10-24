@@ -24,7 +24,7 @@ const springArmComponent = new SpringArmComponent(player, camera);
 
 // Define properties for the GUI and interaction
 const properties = {
-  springArmLength: 15,
+  springArmLength: 5,
   doCollision: true,
   rotate: false,
   innerWallSpeed: 0.001,
@@ -56,10 +56,10 @@ const worldSettings = gui.addFolder("World Settings");
 worldSettings.add(properties, "rotate").name("Rotate Walls");
 worldSettings
   .add(properties, "innerWallSpeed", 0.001, 0.01, 0.001)
-  .name("Rotate Walls");
+  .name("Rotate Inner Walls");
 worldSettings
   .add(properties, "outerWallSpeed", 0.001, 0.01, 0.001)
-  .name("Rotate Walls");
+  .name("Rotate Outer Walls");
 
 //Game loop
 const tick = () => {
