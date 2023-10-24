@@ -26,6 +26,12 @@ boundingFloor.setFromObject(floor);
 scene.add(floor);
 collisionGeometry.push(floor);
 
+//Random Number Generator between interval
+function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 /*----------------------------------------
 ------------------------------------------
 -----------------Box----------------------
@@ -33,16 +39,19 @@ collisionGeometry.push(floor);
 ----------------------------------------*/
 const boxGroup = new THREE.Group();
 for (let i = 0; i < 8; i++) {
+  const randomX = randomIntFromInterval(1, 2);
+  const randomY = randomIntFromInterval(1, 4);
+  const randomZ = randomIntFromInterval(1, 2);
   const angle = (i / 8) * Math.PI * 2;
   const box = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 3, 1),
+    new THREE.BoxGeometry(randomX, randomY, randomZ),
     new THREE.MeshBasicMaterial({
       color: "blue",
     })
   );
   const x = 5 * Math.cos(angle);
   const z = 5 * Math.sin(angle);
-  box.position.set(x, 1, z);
+  box.position.set(x, 1.2, z);
 
   boxGroup.add(box);
   collisionGeometry.push(box);
@@ -60,8 +69,9 @@ const plane1Group = new THREE.Group();
 const plane2Group = new THREE.Group();
 for (let i = 0; i < 8; i++) {
   const angle = (i / 8) * Math.PI * 2;
+  const random = randomIntFromInterval(1, 5);
   const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(1, 3, 8, 8),
+    new THREE.PlaneGeometry(1, random, 8, 8),
     new THREE.MeshBasicMaterial({
       color: "red",
       side: THREE.DoubleSide,
@@ -71,6 +81,7 @@ for (let i = 0; i < 8; i++) {
 
   const x = 3 * Math.cos(angle);
   const z = 3 * Math.sin(angle);
+  const y = random;
 
   if ((i + 1) % 2 == 0) {
     plane.rotation.y = angle;
@@ -78,15 +89,16 @@ for (let i = 0; i < 8; i++) {
     plane.rotation.y = angle + Math.PI / 2;
   }
 
-  plane.position.set(x, 1, z);
+  plane.position.set(x, y, z);
   collisionGeometry.push(plane);
   plane1Group.add(plane);
 }
 
 for (let i = 0; i < 8; i++) {
   const angle = (i / 8) * Math.PI * 2;
+  const random = randomIntFromInterval(1, 3);
   const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(3, 3, 8, 8),
+    new THREE.PlaneGeometry(random, random, 8, 8),
     new THREE.MeshBasicMaterial({
       color: "red",
       side: THREE.DoubleSide,
@@ -96,6 +108,7 @@ for (let i = 0; i < 8; i++) {
 
   const x = 7 * Math.cos(angle);
   const z = 7 * Math.sin(angle);
+  const y = random;
 
   if ((i + 1) % 2 == 0) {
     plane.rotation.y = angle;
@@ -103,7 +116,7 @@ for (let i = 0; i < 8; i++) {
     plane.rotation.y = angle + Math.PI / 2;
   }
 
-  plane.position.set(x, 1, z);
+  plane.position.set(x, y, z);
   collisionGeometry.push(plane);
   plane2Group.add(plane);
 }
