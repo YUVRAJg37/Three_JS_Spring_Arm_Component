@@ -15,7 +15,7 @@ player.position.y = -0.1;
 scene.add(player);
 const springArmComponent = new SpringArmComponent(player, camera);
 const properties = {
-  springArmLength: 4,
+  springArmLength: 10,
 };
 gui
   .add(properties, "springArmLength", 1, 10, 0.01)

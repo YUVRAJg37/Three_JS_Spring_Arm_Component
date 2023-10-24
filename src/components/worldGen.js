@@ -5,7 +5,7 @@ const collisionGeometry = [];
 const boundingVolumeBoxes = [];
 
 const floor = new THREE.Mesh(
-  new THREE.BoxGeometry(10, 0.01, 10),
+  new THREE.BoxGeometry(30, 0.01, 30),
   new THREE.MeshBasicMaterial({
     color: "green",
     side: THREE.DoubleSide,
@@ -29,8 +29,6 @@ box.position.x = 1;
 const boundingBox = new THREE.Box3();
 boundingBox.setFromObject(box);
 
-boundingVolumeBoxes.push(boundingBox);
-
 const plane = new THREE.Mesh(
   new THREE.BoxGeometry(3, 3, 0.01),
   new THREE.MeshBasicMaterial({
@@ -44,16 +42,16 @@ plane.position.z = 2;
 
 const boundingPlane = new THREE.Box3();
 boundingPlane.setFromObject(plane);
-boundingVolumeBoxes.push(boundingPlane);
 
 scene.add(floor, box, plane);
 
-collisionGeometry.push(floor);
 collisionGeometry.push(box);
 collisionGeometry.push(plane);
+collisionGeometry.push(floor);
 
 const Geometry = {
   collisionGeometry: collisionGeometry,
   boundingVolumeBoxes: boundingVolumeBoxes,
+  floor: floor,
 };
 export default Geometry;

@@ -3,6 +3,8 @@ class SpringArmComponent {
   #rayCaster;
   #targetPosition;
   #boundingCameraSphere;
+  #boundingCameraSphere2;
+  #previousCamPos;
   constructor(obj, cam) {
     this.Target = obj;
     this.#targetPosition = new THREE.Vector3(
@@ -15,7 +17,9 @@ class SpringArmComponent {
     this.doCollisionTest = true;
     this.SpringArmDistance = this.#targetPosition.distanceTo(this.Cam.position);
     this.#rayCaster = new THREE.Raycaster();
-    this.#boundingCameraSphere = new THREE.Sphere(this.Cam.position, 0.3);
+    this.#boundingCameraSphere = new THREE.Sphere(this.Cam.position, 0.5);
+    this.#boundingCameraSphere2 = new THREE.Sphere(this.Cam.position, 1);
+    this.#previousCamPos = new THREE.Vector3();
   }
 
   GetNewCamPosition(currentPosition, len) {
@@ -39,7 +43,7 @@ class SpringArmComponent {
     this.Cam.position.lerp(point, lerp);
   }
 
-  SetToOriginalPoint() {
+  SetToOriginalPoint(ler) {
     if (
       !this.Comparator(
         this.Cam.position,
@@ -49,51 +53,81 @@ class SpringArmComponent {
     ) {
       this.CamLerpToPoint(
         this.GetNewCamPosition(this.Cam.position, this.SpringArmLength),
-        0.1
+        ler
       );
     }
   }
-
   CheckCollision(geo) {
+    const dir =
+      this.#targetPosition.distanceTo(this.Cam.position) -
+      this.#targetPosition.distanceTo(this.#previousCamPos);
+    this.#previousCamPos.copy(this.Cam.position);
+
     const boundingVolBox = geo.boundingVolumeBoxes;
     const collisionGeometry = geo.collisionGeometry;
-
-    for (const vol of boundingVolBox) {
-      if (this.#boundingCameraSphere.intersectsBox(vol)) {
+    if (this.#boundingCameraSphere.intersectsBox(boundingVolBox[0])) {
+      const camPosition = new THREE.Vector3(
+        this.Cam.position.x,
+        this.Cam.position.y,
+        this.Cam.position.z
+      );
+      camPosition.y -= 0.5;
+      const directionVector = new THREE.Vector3(
+        camPosition.x - this.Target.position.x,
+        camPosition.y - this.Target.position.y,
+        camPosition.z - this.Target.position.z
+      );
+      directionVector.normalize();
+      // Raycast--------------------
+      this.#rayCaster.set(this.Target.position, directionVector);
+      const intersects = this.#rayCaster.intersectObject(geo.floor);
+      if (intersects.length > 0) {
         const point = new THREE.Vector3(
-          this.Cam.position.x,
-          this.Cam.position.y,
-          this.Cam.position.z
+          intersects[0].point.x,
+          intersects[0].point.y,
+          intersects[0].point.z
+        );
+        point.y += 0.5;
+        let distance = point.distanceTo(this.#targetPosition);
+        const dis = this.Cam.position.distanceTo(intersects[0].point);
+        if (dis > 4) {
+          this.Cam.position.copy(this.GetNewCamPosition(point, distance));
+        } else
+          this.CamLerpToPoint(this.GetNewCamPosition(point, distance), 0.1);
+      }
+    } else {
+      const directionVector = new THREE.Vector3(
+        this.Cam.position.x - this.Target.position.x,
+        this.Cam.position.y - this.Target.position.y,
+        this.Cam.position.z - this.Target.position.z
+      );
+      directionVector.normalize();
+      // Raycast--------------------
+      this.#rayCaster.set(this.Target.position, directionVector);
+      const intersects = this.#rayCaster.intersectObjects(collisionGeometry);
+      if (
+        intersects.length > 0 &&
+        intersects[0].distance <= this.SpringArmDistance
+      ) {
+        const point = new THREE.Vector3(
+          intersects[0].point.x,
+          intersects[0].point.y,
+          intersects[0].point.z
         );
         let distance = point.distanceTo(this.#targetPosition);
-        distance -= 1.5;
-        this.CamLerpToPoint(this.GetNewCamPosition(point, distance), 0.1);
-      }
-    }
-    const directionVector = new THREE.Vector3(
-      this.Cam.position.x - this.Target.position.x,
-      this.Cam.position.y - this.Target.position.y,
-      this.Cam.position.z - this.Target.position.z
-    );
-    directionVector.normalize();
+        distance -= 0.2;
+        this.CamLerpToPoint(this.GetNewCamPosition(point, distance), 0.9);
+      } else {
+        if (!this.#boundingCameraSphere2.intersectsBox(boundingVolBox[0])) {
+          this.SetToOriginalPoint(0.1);
+        } else {
+          this.SetToOriginalPoint(0.1);
 
-    // Raycast--------------------
-    this.#rayCaster.set(this.Target.position, directionVector);
-    const intersects = this.#rayCaster.intersectObjects(collisionGeometry);
-    if (
-      intersects.length > 0 &&
-      intersects[0].distance <= this.SpringArmDistance
-    ) {
-      const point = new THREE.Vector3(
-        intersects[0].point.x,
-        intersects[0].point.y,
-        intersects[0].point.z
-      );
-      let distance = point.distanceTo(this.#targetPosition);
-      distance -= 0.5;
-      this.CamLerpToPoint(this.GetNewCamPosition(point, distance), 0.1);
-    } else {
-      this.SetToOriginalPoint();
+          if (dir > 0) {
+            console.log("first");
+          }
+        }
+      }
     }
   }
 
