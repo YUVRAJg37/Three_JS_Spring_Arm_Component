@@ -26,6 +26,5 @@ Start the application
 
 
 
-
-https://github.com/YUVRAJg37/Three_JS_Spring_Arm_Component/assets/81169447/352974d3-ab9b-4f19-b1aa-36b5c49f785a
+https://github.com/YUVRAJg37/Three_JS_Spring_Arm_Component/assets/81169447/3cc0f8c8-eafa-4087-bd5d-41305006ff38
 
