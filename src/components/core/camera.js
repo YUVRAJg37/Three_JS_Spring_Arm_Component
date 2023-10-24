@@ -7,8 +7,8 @@ const camera = new THREE.PerspectiveCamera(
   viewport.width / viewport.height
 );
 
-camera.position.y = 1;
-camera.position.x = 1;
+camera.position.y = 5;
+camera.position.x = 5;
 camera.position.z = 1;
 camera.updateProjectionMatrix();
 scene.add(camera);
