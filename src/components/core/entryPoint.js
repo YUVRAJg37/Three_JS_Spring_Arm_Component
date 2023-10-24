@@ -24,7 +24,7 @@ const springArmComponent = new SpringArmComponent(player, camera);
 
 // Define properties for the GUI and interaction
 const properties = {
-  springArmLength: 5,
+  springArmLength: 15,
   doCollision: true,
   rotate: false,
   innerWallSpeed: 0.001,
